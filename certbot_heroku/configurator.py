@@ -242,6 +242,9 @@ detailed set-up instructions."""
     def restart(self):
         return
 
+    def get_all_certs_keys(self):
+        return set()
+
 
 class _HerokuConfigVarAction(argparse.Action):
     """Action class for parsing heroku_config_var."""
