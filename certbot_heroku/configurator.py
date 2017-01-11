@@ -236,14 +236,23 @@ detailed set-up instructions."""
             ps = subprocess.Popen([HEROKU_CLI, "certs", "-a", heroku_app], stdout=subprocess.PIPE)
             subprocess.check_call(['grep', domain], stdin=ps.stdout, stdout=DEV_NULL)
             ps.wait()
-            # Domain found; i.e. need to update
+
+            # Cert found; i.e. need to update
             logger.info("Updating existing Heroku SSL endpoint... ")
-            subprocess.call([HEROKU_CLI, "certs:update", fullchain_path, key_path, "-a", heroku_app, "--confirm", heroku_app], stdout=DEV_NULL)
+            try:
+                subprocess.check_call(
+                    [HEROKU_CLI, "certs:update", fullchain_path, key_path, "-a", heroku_app, "--confirm", heroku_app],
+                    stdout=DEV_NULL)
+            except subprocess.CalledProcessError:
+                raise errors.PluginError("'heroku certs:update' command failed. See error above.")
         except subprocess.CalledProcessError:
             # Need to add SSL; it wasn't setup before
             logger.info("Configuring new Heroku SSL endpoint... ")
-            subprocess.call([HEROKU_CLI, "certs:add", fullchain_path, key_path, "-a", heroku_app], stdout=DEV_NULL)
-
+            try:
+                subprocess.check_call([HEROKU_CLI, "certs:add", fullchain_path, key_path, "-a", heroku_app],
+                                      stdout=DEV_NULL)
+            except subprocess.CalledProcessError:
+                raise errors.PluginError("'heroku certs:add' command failed. See error above.")
 
     def get_all_names(self):
         all_names = set()
