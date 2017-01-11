@@ -22,17 +22,27 @@ Did it work?
     Description: Heroku SSL
     [...]
 
-Note: your LE client might be called `certbot-auto` instead of `certbot`. Same difference.
+Note: your LE client might be called `certbot-auto` instead of `certbot`.
+If that is the case, you are probably running in a virtual environment. Find where that venv is by running:
+
+    $ certbot-auto --version
+    Requesting root privileges to run certbot...
+      /home/gb/.local/share/letsencrypt/bin/letsencrypt --version
+    letsencrypt 0.9.3
+
+For the above, I would use `/home/gb/.local/share/letsencrypt/bin/pip` instead of just `pip`, to install.
 
 __2. Server-side script:__  
 In order for ACME authentication to succeed, you need to configure your Heroku app to answer the ACME challenge with the appropriate value (stored in the `LETS_ENCRYPT_CHALLENGE` environment variable`).  
-How you do that depends on the buildpack you use. See examples in the _server/_ folder.
+How you do that depends on the buildpack you use. See examples in the [_server/_ folder](https://github.com/gboudreau/certbot-heroku/tree/master/server).
 
 __3. Usage:__
 
     $ certbot run --configurator certbot-heroku:heroku -H YourHerokuAppName -d www.example.com
       or
-    $ certbot renew --quiet --configurator certbot-heroku:heroku -H YourHerokuAppName -d www.example.com
+    $ certbot certonly --authenticator certbot-heroku:heroku -H YourHerokuAppName -d www.example.com
+      or
+    $ certbot install --installer certbot-heroku:heroku -H YourHerokuAppName -d www.example.com
 
 
 ## How it works
