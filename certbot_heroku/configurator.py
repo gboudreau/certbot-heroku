@@ -18,6 +18,19 @@ from certbot.plugins import common
 
 logger = logging.getLogger(__name__)
 
+try:
+    # Check if we need to add the custom domain to the Heroku app
+    output = subprocess.check_output(["which", "heroku"])
+    HEROKU_CLI = output
+except subprocess.CalledProcessError:
+    # Looking for heroku CLI at the usual places
+    if os.path.isfile("/usr/local/heroku/bin/heroku"):
+        HEROKU_CLI = "/usr/local/heroku/bin/heroku"
+    elif os.path.isfile("/usr/local/bin/heroku"):
+        HEROKU_CLI = "/usr/local/bin/heroku"
+    else:
+        raise errors.PluginError("Error: can't find Heroku CLI")
+
 
 @zope.interface.implementer(interfaces.IAuthenticator, interfaces.IInstaller)
 @zope.interface.provider(interfaces.IPluginFactory)
@@ -129,17 +142,17 @@ detailed set-up instructions."""
         FNULL = open(os.devnull, 'w')
         try:
             # Check if we need to add the custom domain to the Heroku app
-            ps = subprocess.Popen(["heroku", "domains", "-a", heroku_app], stdout=subprocess.PIPE)
+            ps = subprocess.Popen([HEROKU_CLI, "domains", "-a", heroku_app], stdout=subprocess.PIPE)
             subprocess.check_call(['grep', achall.domain], stdin=ps.stdout, stdout=FNULL)
             ps.wait()
         except subprocess.CalledProcessError:
             # Need to add domain to Heroku app
             print("Adding domain {0} to Heroku app {1}".format(achall.domain, heroku_app))
-            subprocess.call(["heroku", "domains:add", achall.domain, "-a", heroku_app])
+            subprocess.call([HEROKU_CLI, "domains:add", achall.domain, "-a", heroku_app])
 
         logger.debug("Attempting to set %s for Heroku app %s", config_value, heroku_app)
         try:
-            subprocess.check_call(["heroku", "config:set", config_value, "-a", heroku_app])
+            subprocess.check_call([HEROKU_CLI, "config:set", config_value, "-a", heroku_app])
         except subprocess.CalledProcessError:
             raise errors.PluginError(
                 "Failed to use 'heroku config:set' to set the config var {0} "
@@ -155,7 +168,7 @@ detailed set-up instructions."""
         for achall in achalls:
             heroku_app = self.conf("map")[achall.domain]
             logger.debug("Removing %s config var for app %s", self.conf("configvar"), heroku_app)
-            subprocess.check_call(["heroku", "config:unset", self.conf("configvar"), "-a", heroku_app])
+            subprocess.check_call([HEROKU_CLI, "config:unset", self.conf("configvar"), "-a", heroku_app])
 
     #####
     # Installer
@@ -174,26 +187,26 @@ detailed set-up instructions."""
         heroku_app = self.conf("map")[domain]
         try:
             # Check if we need to add the custom domain to the Heroku app
-            ps = subprocess.Popen(["heroku", "domains", "-a", heroku_app], stdout=subprocess.PIPE)
+            ps = subprocess.Popen([HEROKU_CLI, "domains", "-a", heroku_app], stdout=subprocess.PIPE)
             subprocess.check_call(['grep', domain], stdin=ps.stdout, stdout=FNULL)
             ps.wait()
         except subprocess.CalledProcessError:
             # Need to add domain to Heroku app
             print("Adding domain {0} to Heroku app {1}".format(domain, heroku_app))
-            subprocess.call(["heroku", "domains:add", domain, "-a", heroku_app])
+            subprocess.call([HEROKU_CLI, "domains:add", domain, "-a", heroku_app])
 
         try:
             # Check if we need to add or update the SSL cert
-            ps = subprocess.Popen(["heroku", "certs", "-a", heroku_app], stdout=subprocess.PIPE)
+            ps = subprocess.Popen([HEROKU_CLI, "certs", "-a", heroku_app], stdout=subprocess.PIPE)
             subprocess.check_call(['grep', domain], stdin=ps.stdout, stdout=FNULL)
             ps.wait()
             # Domain found; i.e. need to update
             print("Updating existing Heroku SSL endpoint... ")
-            subprocess.call(["heroku", "certs:update", fullchain_path, key_path, "-a", heroku_app, "--confirm", heroku_app])
+            subprocess.call([HEROKU_CLI, "certs:update", fullchain_path, key_path, "-a", heroku_app, "--confirm", heroku_app])
         except subprocess.CalledProcessError:
             # Need to add SSL; it wasn't setup before
             print("Configuring new Heroku SSL endpoint... ")
-            subprocess.call(["heroku", "certs:add", fullchain_path, key_path, "-a", heroku_app])
+            subprocess.call([HEROKU_CLI, "certs:add", fullchain_path, key_path, "-a", heroku_app])
 
 
     def get_all_names(self):
@@ -276,7 +289,7 @@ def _validate_app(heroku_app):
     """
     try:
         FNULL = open(os.devnull, 'w')
-        subprocess.check_call(["heroku", "info", "-a", heroku_app], stdout=FNULL)
+        subprocess.check_call([HEROKU_CLI, "info", "-a", heroku_app], stdout=FNULL)
     except subprocess.CalledProcessError:
         raise errors.PluginError(
             "No Heroku app named {0} was found. Make sure you have the Heroku "
