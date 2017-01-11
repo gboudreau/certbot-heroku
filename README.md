@@ -7,6 +7,8 @@ A plugin for the certbot (Let's Encrypt) client that allows you to automate the 
 
 Requirements: [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and [certbot (or certbot-auto)](https://certbot.eff.org/) installed. You should run `heroku` at least once to make sure it's set-up correctly.
 
+Note that the authorization plugin is not compatible with Heroku's [Preboot feature](https://devcenter.heroku.com/articles/preboot). If enabled for the specified app, it will be temporarily disabled to allow the plugin to do it's job.
+
 __1. Install the certbot-heroku plugin:__
     
     $ curl -LO https://github.com/gboudreau/certbot-heroku/archive/master.zip
