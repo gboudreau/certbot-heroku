@@ -10,11 +10,25 @@ Requirements: [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and
 Note that the authorization plugin is not compatible with Heroku's [Preboot feature](https://devcenter.heroku.com/articles/preboot). If enabled for the specified app, it will be temporarily disabled to allow the plugin to do it's job.
 
 __1. Install the certbot-heroku plugin:__
-    
+
+Is your client called `certbot-auto`? See note 1 below.  
+Did you install `certbot` on Mac using [Homebrew](http://brew.sh)? See note 2 below.
+
     $ curl -LO https://github.com/gboudreau/certbot-heroku/archive/master.zip
     $ unzip master.zip && rm master.zip
     $ cd certbot-heroku-master
     $ pip install . # or `python setup.py install`
+
+Note 1: Your LE client might be called `certbot-auto` instead of `certbot`.
+If that is the case, use `~/.local/share/letsencrypt/bin/pip` or `~/.local/share/letsencrypt/bin/python` to install, instead of just `pip` or `python`.  
+Also, you will need to re-install the plugin each time `certbot-auto` upgrades to a newer version, which it will do automatically unless you specify the `--no-self-upgrade` parameter when running `certbot-auto`.
+
+Note 2: If you installed `certbot` using [Homebrew](http://brew.sh) on Mac, find the full path to the `python` binary using this command:
+
+    cat $(which certbot) | head -1
+
+Then use the full path to the `pip` binary found in the same folder to install.  
+Also, you will need to re-install the plugin each time Homebrew will update `certbot`.
     
 Did it work?
 
@@ -23,16 +37,6 @@ Did it work?
     * certbot-heroku:heroku
     Description: Heroku SSL
     [...]
-
-Note: your LE client might be called `certbot-auto` instead of `certbot`.
-If that is the case, you are probably running in a virtual environment. Find where that venv is by running:
-
-    $ certbot-auto --version
-    Requesting root privileges to run certbot...
-      /home/gb/.local/share/letsencrypt/bin/letsencrypt --version
-    letsencrypt 0.9.3
-
-For the above, I would use `/home/gb/.local/share/letsencrypt/bin/pip` instead of just `pip`, to install.
 
 __2. Server-side script:__  
 In order for ACME authentication to succeed, you need to configure your Heroku app to answer the ACME challenge with the appropriate value (stored in the `LETS_ENCRYPT_CHALLENGE` environment variable`).  
