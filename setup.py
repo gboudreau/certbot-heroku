@@ -1,7 +1,7 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '0.0.1.dev1'
+version = '0.0.1.dev2'
 
 setup(
     name='certbot-heroku',
