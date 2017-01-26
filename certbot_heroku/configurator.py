@@ -338,7 +338,7 @@ def _validate_app(heroku_app):
 def _get_heroku_cli():
     try:
         # Check if we need to add the custom domain to the Heroku app
-        heroku_cli = subprocess.check_output(["which", "heroku"], stderr=DEV_NULL)
+        heroku_cli = subprocess.check_output(["which", "heroku"], stderr=DEV_NULL).strip()
     except subprocess.CalledProcessError:
         # Looking for heroku CLI at the usual places
         if os.path.isfile("/usr/local/heroku/bin/heroku"):
