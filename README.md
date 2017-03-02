@@ -39,8 +39,8 @@ Did it work?
     [...]
 
 __2. Server-side script:__  
-In order for ACME authentication to succeed, you need to configure your Heroku app to answer the ACME challenge with the appropriate value (stored in the `LETS_ENCRYPT_CHALLENGE` environment variable`).  
-How you do that depends on the buildpack you use. See examples in the [_server/_ folder](https://github.com/gboudreau/certbot-heroku/tree/master/server).
+In order for ACME authentication to succeed, you need to configure your Heroku app to answer the ACME challenge with the appropriate value (stored in the `LETS_ENCRYPT_CHALLENGE` environment variable).  
+How you do that depends on the buildpack you use. See examples in the [server/](https://github.com/gboudreau/certbot-heroku/tree/master/server) folder.
 
 __3. Usage:__
 
