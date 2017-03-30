@@ -3,6 +3,13 @@
 A plugin for the certbot (Let's Encrypt) client that allows you to automate the installation, and most importantly the renewal, of SSL certificates for you Heroku apps.
 
 
+## Heroku Automated Certificate Management (ACM)
+
+If you are paying anything to Heroku for your app, you can use Heroku's ACM feature to automatically generate and renew Let's Encrypt certificates for your app.  
+Ref: https://devcenter.heroku.com/articles/automated-certificate-management  
+If you are using Heroku free plan, or can't or don't want to use ACM, continue below.
+
+
 ## How to use
 
 Requirements: [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) and [certbot (or certbot-auto)](https://certbot.eff.org/) installed. You should run `heroku` at least once to make sure it's set-up correctly.
