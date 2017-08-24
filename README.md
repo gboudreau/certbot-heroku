@@ -10,7 +10,7 @@ Ref: https://devcenter.heroku.com/articles/automated-certificate-management
 
 **If you are using Heroku free plan, sadly, Heroku discontinued support for SSL for you.**
 
-And thus, this plugin is not deprecated, unless you somehow can't or don't want to use ACM. If so, continue below.
+And thus, this plugin is now deprecated, unless you somehow can't or don't want to use ACM. If so, continue below.
 
 
 ## How to use
