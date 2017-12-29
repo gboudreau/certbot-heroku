@@ -1,3 +1,6 @@
+**THIS PLUGIN IS DEPRECATED**
+
+
 # Let's Encrypt plugin for Heroku apps
 
 A plugin for the certbot (Let's Encrypt) client that allows you to automate the installation, and most importantly the renewal, of SSL certificates for you Heroku apps.
@@ -10,7 +13,7 @@ Ref: https://devcenter.heroku.com/articles/automated-certificate-management
 
 **If you are using Heroku free plan, sadly, Heroku discontinued support for SSL for you.**
 
-And thus, this plugin is now deprecated, unless you somehow can't or don't want to use ACM. If so, continue below.
+And thus, this plugin is now **deprecated**, unless you somehow can't or don't want to use ACM. If so, continue below.
 
 
 ## How to use
