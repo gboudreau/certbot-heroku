@@ -1,4 +1,4 @@
-   Copyright 2016 Guillaume Boudreau
+   Copyright 2021 Jeppe Liisberg
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -11,6 +11,10 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+   Incorporating code from https://github.com/gboudreau/certbot-heroku
+   Copyright 2016 Guillaume Boudreau
+   Licensed Apache Version 2.0
 
    Incorporating code from nginxparser
    Copyright 2014 Fatih Erikli

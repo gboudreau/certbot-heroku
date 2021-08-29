@@ -1,15 +1,15 @@
 from setuptools import setup
 from setuptools import find_packages
 
-version = '0.0.1.dev2'
+version = '0.0.1'
 
 setup(
     name='certbot-heroku',
     version=version,
-    description="Heroku plugin for certbot",
-    url='https://github.com/gboudreau/certbot-heroku',
-    author="Guillaume Boudreau",
-    author_email='guillaume@pommepause.com',
+    description="REST/Heroku plugin for certbot",
+    url='https://github.com/jeppeliisberg/certbot-heroku',
+    author="Jeppe Liisberg",
+    author_email='jeppe@liisberg.net',
     license='Apache License 2.0',
     classifiers=[
         'Development Status :: 3 - Alpha',
